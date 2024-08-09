@@ -25,38 +25,41 @@ void refresh();
 void max();
 void top();
 void line();
-void display() {
-    int c = 0;
-    char input[MAX_SIZE];
-    char *token;
 
-    // Counting the number of patients
-    for (int i = 0; i < strlen(nameb); i++) {
-        if (nameb[i] == ':')
-            c++;
-    }
+    int main() {
+        char input[MAX_SIZE];
 
-    // Checking if there are no patients
-    if (c == 0) {
-        println("No Data Found", 0);
-        return;
-    } else {
-        max();
-        top();
-        // Tokenizing and printing each patient's information
-        token = strtok(nameb, ":");
-        for (int i = 0; i < c; i++) {
-            printf("\n|%s\t\t%s\t\t%.2f\t\t%s|", token, strtok(NULL, ":"), amtb[i], strtok(NULL, ":"));
-            token = strtok(NULL, ":");
+        printf("\n1. Enter Data\n2. Patient List\n3. Patient list based on doctor\n4. Patient based on ammount\n5. Enter Q to return to Home Screen\n");
+        fgets(input, sizeof(input), stdin);
+        strtok(input, "\n"); // remove newline character
+
+        if (strcmp(input, "Q") == 0) {
+            printf("\n");
+            return 1;
         }
-        line();
-    }
 
-    // Waiting for user input
-    printf("\nPress Enter to continue...\n");
-    fgets(input, sizeof(input), stdin);
+        int t = atoi(input);
+        if (t == 1)
+            input();
+        else if (t == 2)
+            display();
+        else if (t == 3) {
+            printf("Please choose doctors name:\n1. Dr. Jagdish Patil\n2. Dr. Surbhi Anand\n3. Dr. Sanjay Sachdeva\n");
+            fgets(input, sizeof(input), stdin);
+            strtok(input, "\n"); // remove newline character
+            display_doc(docname[atoi(input) - 1]);
+        } else if (t == 4) {
+            printf("Please enter amount to be filtered: ");
+            fgets(input, sizeof(input), stdin);
+            strtok(input, "\n"); // remove newline character
+            display_amt(atof(input));
+        } else
+            main_paitent();
+
+    
+    return 1;
 }
- void input() {
+    void input() {
     char n[MAX_SIZE], dn[MAX_SIZE], i[MAX_SIZE], a[MAX_SIZE], check_input[MAX_SIZE];
     int check = 0, choice;
 
@@ -108,7 +111,39 @@ void display() {
         input();
     }
 }
-void display_doc(char *d) {
+void display() {
+    int c = 0;
+    char input[MAX_SIZE];
+    char *token;
+
+    // Counting the number of patients
+    for (int i = 0; i < strlen(nameb); i++) {
+        if (nameb[i] == ':')
+            c++;
+    }
+
+    // Checking if there are no patients
+    if (c == 0) {
+        println("No Data Found", 0);
+        return;
+    } else {
+        max();
+        top();
+        // Tokenizing and printing each patient's information
+        token = strtok(nameb, ":");
+        for (int i = 0; i < c; i++) {
+            printf("\n|%s\t\t%s\t\t%.2f\t\t%s|", token, strtok(NULL, ":"), amtb[i], strtok(NULL, ":"));
+            token = strtok(NULL, ":");
+        }
+        line();
+    }
+
+    // Waiting for user input
+    printf("\nPress Enter to continue...\n");
+    fgets(input, sizeof(input), stdin);
+}
+
+    void display_doc(char *d) {
     int c = 0;
     char input[MAX_SIZE];
     char *token;
@@ -150,3 +185,44 @@ void display_doc(char *d) {
 }
 
     
+void display_amt(double a) {
+    int c = 0;
+    char input[MAX_SIZE];
+    char *token;
+
+    // Counting the number of patients
+    for (int i = 0; i < strlen(nameb); i++) {
+        if (nameb[i] == ':')
+            c++;
+    }
+
+    // Counting the number of patients with the specified amount
+    int t = 0;
+    for (int i = 0; i < c; i++) {
+        if (amtb[i] == a)
+            t++;
+    }
+
+    // If no patients found with the specified amount
+    if (t == 0) {
+        println("No Data Found", 0);
+        return;
+    } else {
+        max();
+        top();
+        // Printing information of patients with the specified amount
+        token = strtok(nameb, ":");
+        while (token != NULL) {
+            if (amtb[c] == a) {
+                printf("\n|%s\t\t%s\t\t%.2f\t\t%s|", token, strtok(NULL, ":"), amtb[c], strtok(NULL, ":"));
+            }
+            token = strtok(NULL, ":");
+        }
+        line();
+    }
+    
+    // Waiting for user input
+    printf("\nPress Enter to continue...\n");
+    fgets(input, sizeof(input), stdin);
+}
+}
