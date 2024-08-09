@@ -226,4 +226,94 @@ void display_amt(double a) {
     fgets(input, sizeof(input), stdin);
 }
 
+    void refresh() {
+    int c = 0;
+    int w = 0;
+    char wd[MAX_SIZE];
+    char *token;
 
+    // Counting the number of patients
+    for (int i = 0; i < strlen(nameb); i++) {
+        if (nameb[i] == ':')
+            c++;
+    }
+
+    // Allocating memory for arrays based on the number of patients
+    char *name[c];
+    char *doc[c];
+    char *issue[c];
+    double amt[c];
+
+    // Tokenizing and populating arrays
+    token = strtok(nameb, ":");
+    while (token != NULL) {
+        strcpy(wd, token);
+        name[w] = wd;
+        token = strtok(NULL, ":");
+        strcpy(wd, token);
+        doc[w] = wd;
+        token = strtok(NULL, ":");
+        strcpy(wd, token);
+        issue[w] = wd;
+        token = strtok(NULL, ":");
+        strcpy(wd, token);
+        amt[w] = atof(wd);
+        token = strtok(NULL, ":");
+        w++;
+    }
+}
+
+    void max() {
+    mp = 0;
+    int i;
+    
+    // Finding the maximum length among columns, names, doctors, and issues
+    char *col[] = { "Name", "Doctor", "Amount", "Issue" };
+    int col_size = sizeof(col) / sizeof(col[0]);
+    for (i = 0; i < col_size; i++) {
+        int len = strlen(col[i]);
+        if (len > mp)
+            mp = len;
+    }
+
+    int c = 0;
+    for (i = 0; i < strlen(nameb); i++) {
+        if (nameb[i] == ':')
+            c++;
+    }
+
+    char *name[c];
+    char *doc[c];
+    char *issue[c];
+
+    // Tokenizing the strings and calculating maximum length
+    char *token = strtok(nameb, ":");
+    for (i = 0; i < c; i++) {
+        name[i] = token;
+        int len = strlen(token);
+        if (len > mp)
+            mp = len;
+        token = strtok(NULL, ":");
+    }
+
+    token = strtok(docb, ":");
+    for (i = 0; i < c; i++) {
+        doc[i] = token;
+        int len = strlen(token);
+        if (len > mp)
+            mp = len;
+        token = strtok(NULL, ":");
+    }
+
+    token = strtok(issueb, ":");
+    for (i = 0; i < c; i++) {
+        issue[i] = token;
+        int len = strlen(token);
+        if (len > mp)
+            mp = len;
+        token = strtok(NULL, ":");
+    }
+
+    // printf("Maximum length: %d\n", mp);
+}
+}
