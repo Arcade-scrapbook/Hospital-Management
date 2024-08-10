@@ -316,4 +316,100 @@ void display_amt(double a) {
 
     // printf("Maximum length: %d\n", mp);
 }
+
+    
+void top() {
+    int mp = 0;
+    int i, j;
+
+    // Finding the maximum length among columns, names, doctors, and issues
+    char *col[] = { "Name", "Doctor", "Amount", "Issue" };
+    int col_size = sizeof(col) / sizeof(col[0]);
+    for (i = 0; i < col_size; i++) {
+        int len = strlen(col[i]);
+        if (len > mp)
+            mp = len;
+    }
+
+    int c = 0;
+    for (i = 0; i < strlen(nameb); i++) {
+        if (nameb[i] == ':')
+            c++;
+    }
+
+    char *name[c];
+    char *doc[c];
+    char *issue[c];
+
+    // Tokenizing the strings and calculating maximum length
+    char *token = strtok(nameb, ":");
+    for (i = 0; i < c; i++) {
+        name[i] = token;
+        int len = strlen(token);
+        if (len > mp)
+            mp = len;
+        token = strtok(NULL, ":");
+    }
+
+    token = strtok(docb, ":");
+    for (i = 0; i < c; i++) {
+        doc[i] = token;
+        int len = strlen(token);
+        if (len > mp)
+            mp = len;
+        token = strtok(NULL, ":");
+    }
+
+    token = strtok(issueb, ":");
+    for (i = 0; i < c; i++) {
+        issue[i] = token;
+        int len = strlen(token);
+        if (len > mp)
+            mp = len;
+        token = strtok(NULL, ":");
+    }
+
+    // Printing top
+    line();
+    printf("\n|");
+    for (i = 0; i < col_size; i++) {
+        printf(" %s", col[i]);
+        for (j = 0; j < (mp + 1) - strlen(col[i]); j++)
+            printf(" ");
+        printf("|");
+    }
+    line();
+}
+
+void line() {
+    printf("\n+");
+    for (int i = 0; i < mp + 2; i++)
+        printf("-");
+    printf("+");
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < mp + 2; j++)
+            printf("-");
+        printf("+");
+    }
+}
+
+char* printt(char* s) {
+    static char formatted[500]; // Static buffer to hold the formatted string
+    int length = strlen(s);
+    
+    // Check if the length of the string exceeds the maximum padding (mp)
+    if (length >= mp) {
+        snprintf(formatted, 500, "%s|", s); // Just copy the string if it's too long
+    } else {
+        int padding = mp - length;
+        snprintf(formatted, 500, " %s", s); // Start with the string
+        // Add padding spaces
+        for (int i = 0; i < padding; i++) {
+            strncat(formatted, " ", 1);
+        }
+        // Add the ending pipe character
+        strncat(formatted, "|", 1);
+    }
+    
+    return formatted;
 }
